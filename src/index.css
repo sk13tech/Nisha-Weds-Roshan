@@ -1,0 +1,219 @@
+@import "tailwindcss";
+
+@theme {
+  --color-night: #150609;
+  --color-wine: #2a0d13;
+  --color-maroon: #571420;
+  --color-rosewood: #7d1f2e;
+  --color-gold: #d4af37;
+  --color-gold-soft: #c39a3a;
+  --color-gold-light: #eed9a4;
+  --color-champagne: #f3e6c0;
+  --color-cream: #f7eeda;
+  --color-ivory: #fdf8ec;
+  --color-ink: #241418;
+
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-roman: "Cinzel", "Times New Roman", serif;
+  --font-script: "Great Vibes", "Segoe Script", cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #150609;
+  color: #2b1a1e;
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #d4af37;
+  color: #2a0d13;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #1a080c;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#c39a3a, #7d1f2e);
+  border-radius: 999px;
+  border: 2px solid #1a080c;
+}
+
+/* ---------- keyframes ---------- */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin-slow-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes rise-fade {
+  0% {
+    transform: translateY(105vh) translateX(0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.9;
+  }
+  92% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-12vh) translateX(24px);
+    opacity: 0;
+  }
+}
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+@keyframes cue-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(9px);
+    opacity: 0.45;
+  }
+}
+@keyframes glow-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+@keyframes ken-burns {
+  0% {
+    transform: scale(1.08) translateY(0);
+  }
+  100% {
+    transform: scale(1.18) translateY(-1.5%);
+  }
+}
+@keyframes bar-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+@keyframes seal-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(212, 175, 55, 0);
+  }
+}
+
+/* ---------- utilities ---------- */
+.animate-spin-slower {
+  animation: spin-slow 70s linear infinite;
+}
+.animate-spin-slower-rev {
+  animation: spin-slow-rev 110s linear infinite;
+}
+.animate-float-slow {
+  animation: float-y 7s ease-in-out infinite;
+}
+.animate-marquee {
+  animation: marquee-x 32s linear infinite;
+}
+.animate-cue {
+  animation: cue-bob 1.8s ease-in-out infinite;
+}
+.animate-glow {
+  animation: glow-breathe 6s ease-in-out infinite;
+}
+.animate-kenburns {
+  animation: ken-burns 24s ease-in-out infinite alternate;
+}
+
+.text-shimmer-gold {
+  background: linear-gradient(
+    100deg,
+    #a87c1f 15%,
+    #e9cf87 32%,
+    #fbf3d3 50%,
+    #e9cf87 68%,
+    #a87c1f 85%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s linear infinite;
+}
+
+.text-gold-solid {
+  background: linear-gradient(160deg, #f0dda0 0%, #d4af37 45%, #b8871f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* mughal jali lattice — dark & light variants */
+.jali-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23d4af37' stroke-opacity='0.10'%3E%3Cpath d='M28 2 54 28 28 54 2 28Z'/%3E%3Cpath d='M28 14 42 28 28 42 14 28Z'/%3E%3Ccircle cx='28' cy='28' r='2.2'/%3E%3C/g%3E%3C/svg%3E");
+}
+.jali-light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23571420' stroke-opacity='0.07'%3E%3Cpath d='M28 2 54 28 28 54 2 28Z'/%3E%3Cpath d='M28 14 42 28 28 42 14 28Z'/%3E%3Ccircle cx='28' cy='28' r='2.2'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* arch (jharokha) frame */
+.arch-frame {
+  border-top-left-radius: 999px;
+  border-top-right-radius: 999px;
+}
+
+/* gold hairline rule */
+.rule-gold {
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.8), transparent);
+  height: 1px;
+}
