@@ -6,10 +6,10 @@ import { Mandala } from "./ornaments";
 
 const PHOTOS = [
   { src: "/images/couple.jpg", caption: "The Promise", span: "row-span-2 md:col-span-2" },
-  { src: "/images/gallery-varmala.jpg", caption: "Varmala", span: "md:col-span-2" },
-  { src: "/images/gallery-mehndi.jpg", caption: "Mehndi", span: "" },
-  { src: "/images/gallery-rings.jpg", caption: "The Rings", span: "" },
-  { src: "/images/gallery-mandap.jpg", caption: "The Mandap", span: "md:col-span-2" },
+  { src: "/images/1.jpg", caption: "Varmala", span: "md:col-span-2" },
+  { src: "/images/2.jpg", caption: "Mehndi", span: "" },
+  { src: "/images/3.jpg", caption: "The Rings", span: "" },
+  { src: "/images/4.jpg", caption: "The Mandap", span: "md:col-span-2" },
 ];
 
 function Lightbox({ active, onClose, onNav }: { active: number | null; onClose: () => void; onNav: (d: number) => void }) {
