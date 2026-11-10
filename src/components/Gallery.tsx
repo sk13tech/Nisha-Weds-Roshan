@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
 import Reveal, { SectionHeading } from "./Reveal";
 import { Mandala } from "./ornaments";
+import { useLang } from "../lang";
 
 const PHOTOS = [
   { src: "/images/couple.jpg", caption: "The Promise", span: "row-span-2 md:col-span-2" },
@@ -97,6 +98,8 @@ function Lightbox({ active, onClose, onNav }: { active: number | null; onClose: 
 
 export default function Gallery() {
   const [active, setActive] = useState<number | null>(null);
+  const { lang, t } = useLang();
+  const H = lang === "hi";
 
   const nav = useCallback(
     (d: number) => setActive((a) => (a === null ? null : (a + d + PHOTOS.length) % PHOTOS.length)),
@@ -128,10 +131,13 @@ export default function Gallery() {
       <div className="relative mx-auto max-w-7xl px-6">
         <SectionHeading
           tone="dark"
-          eyebrow="Captured in Candlelight — tap any frame"
+          eyebrow={t.gaEyebrow}
           title={
             <>
-              Moments in <span className="font-script text-shimmer-gold">gold</span>
+              {t.gaTitleA}{" "}
+              <span className={H ? "font-hindi-display text-shimmer-gold" : "font-script text-shimmer-gold"}>
+                {t.gaTitleScript}
+              </span>
             </>
           }
         />
@@ -164,8 +170,12 @@ export default function Gallery() {
         </div>
 
         <Reveal delay={0.15} className="mt-14 text-center">
-          <p className="font-roman text-[0.6rem] md:text-xs tracking-[0.45em] pl-[0.45em] uppercase text-gold-light/70">
-            Share yours with <span className="text-shimmer-gold">#NishaWedsRoshan</span>
+          <p
+            className={`text-[0.6rem] text-gold-light/70 md:text-xs ${
+              H ? "font-hindi-serif text-sm tracking-[0.12em]" : "pl-[0.45em] font-roman uppercase tracking-[0.45em]"
+            }`}
+          >
+            {t.gaHash} <span className="text-shimmer-gold">#NishaWedsRoshan</span>
           </p>
         </Reveal>
       </div>

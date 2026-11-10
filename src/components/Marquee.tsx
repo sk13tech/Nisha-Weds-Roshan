@@ -1,21 +1,20 @@
+import { useLang } from "../lang";
 import { Diamond } from "./ornaments";
 
-const ITEMS = [
-  "Nisha Weds Roshan",
-  "03 · 12 · 2026",
-  "Save The Date",
-  "Chas · Jharkhand",
-  "#NishaWedsRoshan",
-  "Two Families · One Celebration",
-];
-
 export default function Marquee() {
+  const { lang, t } = useLang();
+  const H = lang === "hi";
+
   const row = (
     <div className="flex shrink-0 items-center">
-      {ITEMS.map((t) => (
-        <span key={t} className="flex items-center">
-          <span className="whitespace-nowrap px-8 font-roman text-[0.65rem] md:text-xs tracking-[0.45em] uppercase text-champagne/90">
-            {t}
+      {t.marq.map((x: string) => (
+        <span key={x} className="flex items-center">
+          <span
+            className={`whitespace-nowrap px-8 text-[0.65rem] text-champagne/90 md:text-xs ${
+              H ? "font-hindi-serif text-sm tracking-[0.1em]" : "font-roman uppercase tracking-[0.45em]"
+            }`}
+          >
+            {x}
           </span>
           <Diamond className="h-2.5 w-2.5 shrink-0 text-gold" />
         </span>

@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { OrnateDivider } from "./ornaments";
+import { useLang } from "../lang";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -38,6 +39,9 @@ function Item({
 }
 
 export default function Hero({ invited }: { invited: boolean }) {
+  const { lang, t } = useLang();
+  const H = lang === "hi";
+
   const { scrollY } = useScroll();
   const bgY = useTransform(scrollY, [0, 1000], [0, 220]);
   const bgScale = useTransform(scrollY, [0, 1000], [1.06, 1.16]);
@@ -45,6 +49,10 @@ export default function Hero({ invited }: { invited: boolean }) {
     hidden: { opacity: 0 },
     show: (d: number) => ({ opacity: 1, transition: { duration: 1.4, delay: d, ease } }),
   };
+
+  const nameCls = H
+    ? "text-shimmer-gold font-hindi-display text-[clamp(4.6rem,16vw,11rem)] leading-[1.05] drop-shadow-[0_6px_30px_rgba(0,0,0,0.55)]"
+    : "text-shimmer-gold font-script text-[clamp(4.2rem,15vw,10.5rem)] leading-[0.95] drop-shadow-[0_6px_30px_rgba(0,0,0,0.55)]";
 
   return (
     <section id="home" className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
@@ -71,32 +79,44 @@ export default function Hero({ invited }: { invited: boolean }) {
       {/* content */}
       <div className="relative z-10 flex flex-col items-center px-6 pb-28 pt-32 text-center">
         <Item invited={invited} delay={0.15}>
-          <p className="pl-[0.6em] font-roman text-[0.6rem] uppercase tracking-[0.6em] text-gold-light md:text-xs">
-            The Wedding Celebration of
+          <p
+            className={`text-[0.6rem] text-gold-light md:text-xs ${
+              H
+                ? "font-hindi-serif text-sm tracking-[0.15em] md:text-base"
+                : "pl-[0.6em] font-roman uppercase tracking-[0.6em]"
+            }`}
+          >
+            {t.heroEyebrow}
           </p>
         </Item>
 
         <Item invited={invited} delay={0.35} className="mt-6 md:mt-8">
-          <h1 className="text-shimmer-gold font-script text-[clamp(4.2rem,15vw,10.5rem)] leading-[0.95] drop-shadow-[0_6px_30px_rgba(0,0,0,0.55)]">
-            Nisha
-          </h1>
+          <h1 className={nameCls}>{t.brideName}</h1>
         </Item>
 
-        <Item invited={invited} delay={0.5} className="-my-2 flex items-center gap-5 md:-my-5">
+        <Item invited={invited} delay={0.5} className="-my-2 flex items-center gap-5 md:-my-3">
           <span className="rule-gold w-12 md:w-24" />
-          <span className="font-serif text-3xl italic text-champagne md:text-5xl">&amp;</span>
+          <span
+            className={`text-champagne ${
+              H ? "font-hindi-serif text-3xl md:text-4xl" : "font-serif text-3xl italic md:text-5xl"
+            }`}
+          >
+            {t.heroAnd}
+          </span>
           <span className="rule-gold w-12 md:w-24" />
         </Item>
 
         <Item invited={invited} delay={0.65}>
-          <h1 className="text-shimmer-gold pl-6 font-script text-[clamp(4.2rem,15vw,10.5rem)] leading-[0.95] drop-shadow-[0_6px_30px_rgba(0,0,0,0.55)]">
-            Roshan
-          </h1>
+          <h1 className={`${nameCls} ${H ? "" : "pl-6"}`}>{t.groomName}</h1>
         </Item>
 
         <Item invited={invited} delay={0.85} className="mt-7 md:mt-9">
-          <p className="font-serif text-lg italic text-champagne/85 md:text-2xl">
-            the night has found its light
+          <p
+            className={`text-lg text-champagne/85 md:text-2xl ${
+              H ? "font-hindi-serif" : "font-serif italic"
+            }`}
+          >
+            {t.heroTagline}
           </p>
         </Item>
 
@@ -105,11 +125,23 @@ export default function Hero({ invited }: { invited: boolean }) {
         </Item>
 
         <Item invited={invited} delay={1.12} className="mt-6">
-          <p className="pl-[0.35em] font-roman text-sm uppercase tracking-[0.35em] text-ivory md:text-lg">
-            Thursday · 03 December 2026
+          <p
+            className={`text-sm text-ivory md:text-lg ${
+              H
+                ? "font-hindi-serif text-base tracking-[0.12em] md:text-xl"
+                : "pl-[0.35em] font-roman uppercase tracking-[0.35em]"
+            }`}
+          >
+            {t.heroDate}
           </p>
-          <p className="mt-2 pl-[0.45em] font-roman text-[0.6rem] uppercase tracking-[0.45em] text-champagne/60 md:text-[0.7rem]">
-            Seven in the Evening · Chas · Jharkhand
+          <p
+            className={`mt-2 text-[0.6rem] text-champagne/60 md:text-[0.7rem] ${
+              H
+                ? "font-hindi-serif text-sm tracking-[0.12em]"
+                : "pl-[0.45em] font-roman uppercase tracking-[0.45em]"
+            }`}
+          >
+            {t.heroTime}
           </p>
         </Item>
       </div>
@@ -122,7 +154,13 @@ export default function Hero({ invited }: { invited: boolean }) {
         animate={invited ? "show" : "hidden"}
         className="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-gold-light/80"
       >
-        <span className="pl-[0.5em] font-roman text-[0.55rem] uppercase tracking-[0.5em]">Scroll</span>
+        <span
+          className={`text-[0.55rem] ${
+            H ? "font-hindi-serif text-xs tracking-[0.15em]" : "pl-[0.5em] font-roman uppercase tracking-[0.5em]"
+          }`}
+        >
+          {t.heroScroll}
+        </span>
         <ChevronDown size={18} strokeWidth={1.5} className="animate-cue" />
       </motion.div>
     </section>

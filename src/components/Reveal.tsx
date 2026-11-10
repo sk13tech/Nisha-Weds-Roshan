@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { useLang } from "../lang";
 
 export default function Reveal({
   children,
@@ -39,23 +40,27 @@ export function SectionHeading({
   tone?: "light" | "dark";
   align?: "center" | "left";
 }) {
+  const { lang } = useLang();
+  const H = lang === "hi";
   const alignCls = align === "center" ? "items-center text-center" : "items-start text-left";
   return (
     <div className={`flex flex-col gap-4 ${alignCls}`}>
       <Reveal>
         <p
-          className={`font-roman text-[0.65rem] md:text-xs tracking-[0.55em] uppercase ${
-            tone === "light" ? "text-maroon" : "text-gold"
-          }`}
+          className={`${
+            H
+              ? "font-hindi-serif text-sm tracking-[0.15em] md:text-base"
+              : "font-roman text-[0.65rem] uppercase tracking-[0.55em] md:text-xs"
+          } ${tone === "light" ? "text-maroon" : "text-gold"}`}
         >
           {eyebrow}
         </p>
       </Reveal>
       <Reveal delay={0.08}>
         <h2
-          className={`font-serif font-medium leading-[1.05] text-4xl md:text-6xl ${
-            tone === "light" ? "text-ink" : "text-champagne"
-          }`}
+          className={`leading-[1.05] text-4xl font-medium md:text-6xl ${
+            H ? "font-hindi-serif" : "font-serif"
+          } ${tone === "light" ? "text-ink" : "text-champagne"}`}
         >
           {title}
         </h2>

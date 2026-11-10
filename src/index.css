@@ -16,6 +16,8 @@
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-roman: "Cinzel", "Times New Roman", serif;
   --font-script: "Great Vibes", "Segoe Script", cursive;
+  --font-hindi-display: "Yatra One", "Tiro Devanagari Hindi", serif;
+  --font-hindi-serif: "Tiro Devanagari Hindi", "Cormorant Garamond", Georgia, serif;
 }
 
 html {

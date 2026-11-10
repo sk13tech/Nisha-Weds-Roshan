@@ -1,5 +1,6 @@
 import Reveal, { SectionHeading } from "./Reveal";
 import { Diamond, OrnateDivider } from "./ornaments";
+import { useLang } from "../lang";
 
 function PersonCard({
   img,
@@ -8,6 +9,7 @@ function PersonCard({
   parents,
   quote,
   delay,
+  hindi,
 }: {
   img: string;
   name: string;
@@ -15,7 +17,9 @@ function PersonCard({
   parents: string;
   quote: string;
   delay: number;
+  hindi: boolean;
 }) {
+  const serif = hindi ? "font-hindi-serif" : "font-serif";
   return (
     <Reveal delay={delay} className="w-full max-w-sm">
       <div className="group relative">
@@ -31,13 +35,27 @@ function PersonCard({
           <div className="arch-frame absolute inset-3 border border-champagne/50" />
         </div>
         <div className="relative mt-8 text-center">
-          <p className="pl-[0.5em] font-roman text-[0.6rem] tracking-[0.5em] uppercase text-gold-soft">{role}</p>
-          <h3 className="mt-2 font-script text-5xl md:text-6xl text-maroon">{name}</h3>
-          <p className="mt-2 font-serif italic text-sm text-ink/55">{parents}</p>
+          <p
+            className={`text-[0.6rem] text-gold-soft ${
+              hindi
+                ? "font-hindi-serif text-xs tracking-[0.2em]"
+                : "pl-[0.5em] font-roman uppercase tracking-[0.5em]"
+            }`}
+          >
+            {role}
+          </p>
+          <h3
+            className={`mt-2 text-5xl text-maroon md:text-6xl ${
+              hindi ? "font-hindi-display" : "font-script"
+            }`}
+          >
+            {name}
+          </h3>
+          <p className={`mt-2 text-sm text-ink/55 ${serif} ${hindi ? "" : "italic"}`}>{parents}</p>
           <div className="mx-auto mt-4 w-24 text-gold">
             <OrnateDivider width={96} />
           </div>
-          <p className="mx-auto mt-4 max-w-[30ch] font-serif text-base leading-relaxed text-ink/75 md:text-lg">
+          <p className={`mx-auto mt-4 max-w-[30ch] text-base leading-relaxed text-ink/75 md:text-lg ${serif}`}>
             {quote}
           </p>
         </div>
@@ -47,49 +65,61 @@ function PersonCard({
 }
 
 export default function Couple() {
+  const { lang, t } = useLang();
+  const H = lang === "hi";
+
   return (
-    <section id="couple" className="relative scroll-mt-24 overflow-hidden bg-ivory jali-light py-24 md:py-36">
+    <section id="couple" className="jali-light relative scroll-mt-24 overflow-hidden bg-ivory py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
-          eyebrow="Two Souls · One Story"
+          eyebrow={t.coupleEyebrow}
           title={
             <>
-              The Bride <span className="font-script text-gold-soft">&amp;</span> Groom
+              {t.coupleTitleA}{" "}
+              <span className={H ? "font-hindi-serif text-2xl text-gold-soft md:text-3xl" : "font-script text-gold-soft"}>
+                {t.coupleAmp}
+              </span>{" "}
+              {t.coupleTitleB}
             </>
           }
         />
         <Reveal delay={0.2} className="mt-5 text-center">
-          <p className="font-serif italic text-lg text-ink/55 md:text-xl">
-            — when the night met its light —
+          <p
+            className={`text-lg text-ink/55 md:text-xl ${H ? "font-hindi-serif" : "font-serif italic"}`}
+          >
+            {t.coupleSub}
           </p>
         </Reveal>
 
         <div className="mt-16 flex flex-col items-center justify-center gap-14 md:mt-20 lg:flex-row lg:gap-24">
           <PersonCard
             img="/images/bride.jpg"
-            name="Nisha"
-            role="The Bride"
-            parents="Daughter of Radha Devi & Suresh Sah"
-            quote="A poet's heart with moonlight in her laughter — she turns strangers into family and evenings into memories."
+            name={t.brideName}
+            role={t.brideRole}
+            parents={t.brideParents}
+            quote={t.brideQuote}
             delay={0.05}
+            hindi={H}
           />
 
           <Reveal delay={0.25} className="flex flex-col items-center gap-4 lg:-mx-6">
             <Diamond className="h-3 w-3 text-gold" />
-            <span className="font-script text-6xl text-shimmer-gold md:text-7xl">&amp;</span>
+            <span className={`text-shimmer-gold text-6xl md:text-7xl ${H ? "font-hindi-serif" : "font-script"}`}>
+              {t.coupleAmp}
+            </span>
             <Diamond className="h-3 w-3 text-gold" />
           </Reveal>
 
           <PersonCard
             img="/images/groom.jpg"
-            name="Roshan"
-            role="The Groom"
-            parents="Son of Nagina Devi & Raghu Nath Sah"
-            quote="Steady as dawn, warm as a winter lamp — he loved her first as a friend, and then for life."
+            name={t.groomName}
+            role={t.groomRole}
+            parents={t.groomParents}
+            quote={t.groomQuote}
             delay={0.15}
+            hindi={H}
           />
         </div>
-
       </div>
     </section>
   );

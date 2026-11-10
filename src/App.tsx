@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { ChevronUp } from "lucide-react";
 
+import { LangProvider } from "./lang";
 import Preloader from "./components/Preloader";
+import LanguageGate from "./components/LanguageGate";
 import EnvelopeGate from "./components/EnvelopeGate";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -42,19 +44,26 @@ function BackToTop() {
   );
 }
 
-export default function App() {
+function Shell() {
   const [loading, setLoading] = useState(true);
+  const [langChosen, setLangChosen] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem("nr-lang") !== null;
+    } catch {
+      return false;
+    }
+  });
   const [invited, setInvited] = useState(false);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.4 });
 
   useEffect(() => {
-    const locked = loading || !invited;
+    const locked = loading || !langChosen || !invited;
     document.body.style.overflow = locked ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [loading, invited]);
+  }, [loading, langChosen, invited]);
 
   return (
     <div className="min-h-screen bg-night">
@@ -69,7 +78,11 @@ export default function App() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {!loading && !invited && <EnvelopeGate onOpen={() => setInvited(true)} />}
+        {!loading && !langChosen && <LanguageGate onPick={() => setLangChosen(true)} />}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {!loading && langChosen && !invited && <EnvelopeGate onOpen={() => setInvited(true)} />}
       </AnimatePresence>
 
       <Navbar invited={invited} />
@@ -98,5 +111,13 @@ export default function App() {
       {/* cinematic grain */}
       <div className="grain-overlay pointer-events-none fixed inset-0 z-[65] opacity-[0.06] mix-blend-overlay" />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LangProvider>
+      <Shell />
+    </LangProvider>
   );
 }

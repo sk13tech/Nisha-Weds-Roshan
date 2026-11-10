@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import PetalBurst from "./PetalBurst";
+import { useLang } from "../lang";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function EnvelopeGate({ onOpen }: { onOpen: () => void }) {
   const [opened, setOpened] = useState(false);
+  const { lang, t } = useLang();
+  const H = lang === "hi";
+  const metaFont = H
+    ? "font-hindi-serif tracking-[0.12em]"
+    : "font-roman tracking-[0.55em]";
 
   const trigger = () => {
     if (opened) return;
@@ -43,9 +49,9 @@ export default function EnvelopeGate({ onOpen }: { onOpen: () => void }) {
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0, transition: { delay: 0.25, duration: 0.9, ease } }}
         exit={{ opacity: 0 }}
-        className="mb-10 max-w-md pl-[0.55em] text-center font-roman text-[0.6rem] uppercase tracking-[0.55em] text-gold-light/85 md:text-xs"
+        className={`mb-10 max-w-md text-center text-[0.6rem] text-gold-light/85 md:text-xs ${metaFont} ${H ? "" : "pl-[0.55em] uppercase"}`}
       >
-        With love, two families invite you
+        {t.envEyebrow}
       </motion.p>
 
       <motion.div
@@ -66,18 +72,34 @@ export default function EnvelopeGate({ onOpen }: { onOpen: () => void }) {
             transition={{ delay: opened ? 0.6 : 0, duration: 0.95, ease }}
             className="absolute left-1/2 top-[6%] z-[15] flex h-[88%] w-[86%] -translate-x-1/2 flex-col items-center justify-center gap-1.5 border border-gold/40 bg-cream px-4 text-center shadow-xl md:gap-2.5"
           >
-            <p className="font-roman text-[0.45rem] uppercase tracking-[0.4em] text-gold-soft md:text-[0.55rem]">
-              The Wedding Invitation
+            <p
+              className={`text-[0.45rem] text-gold-soft md:text-[0.55rem] ${
+                H ? "font-hindi-serif tracking-[0.1em]" : "font-roman uppercase tracking-[0.4em]"
+              }`}
+            >
+              {t.envCardTitle}
             </p>
-            <p className="font-script text-3xl leading-tight text-maroon md:text-4xl">
-              Nisha &amp; Roshan
+            <p
+              className={`text-3xl leading-tight text-maroon md:text-4xl ${
+                H ? "font-hindi-display" : "font-script"
+              }`}
+            >
+              {H ? "निशा व रोशन" : <>Nisha &amp; Roshan</>}
             </p>
             <span className="rule-gold w-20" />
-            <p className="font-roman text-[0.5rem] uppercase tracking-[0.3em] text-ink/60 md:text-[0.6rem]">
-              Thursday · 03 · 12 · 2026 · Chas
+            <p
+              className={`text-[0.5rem] text-ink/60 md:text-[0.6rem] ${
+                H ? "font-hindi-serif tracking-[0.08em]" : "font-roman uppercase tracking-[0.3em]"
+              }`}
+            >
+              {t.envCardDate}
             </p>
-            <p className="font-serif text-xs italic text-ink/50 md:text-sm">
-              the night finds its light
+            <p
+              className={`text-xs text-ink/50 md:text-sm ${
+                H ? "font-hindi-serif" : "font-serif italic"
+              }`}
+            >
+              {t.envTagline}
             </p>
           </motion.div>
 
@@ -142,9 +164,11 @@ export default function EnvelopeGate({ onOpen }: { onOpen: () => void }) {
         initial={{ opacity: 0 }}
         animate={opened ? { opacity: 0 } : { opacity: [0.35, 1, 0.35] }}
         transition={opened ? { duration: 0.3 } : { delay: 1.1, duration: 2.2, repeat: Infinity }}
-        className="mt-12 font-roman text-[0.55rem] uppercase tracking-[0.45em] text-champagne/70 md:text-[0.65rem]"
+        className={`mt-12 text-[0.55rem] text-champagne/70 md:text-[0.65rem] ${
+          H ? "font-hindi-serif tracking-[0.1em]" : "font-roman uppercase tracking-[0.45em]"
+        }`}
       >
-        Tap the seal to open your invitation
+        {t.envHint}
       </motion.p>
 
       {/* marigold burst */}

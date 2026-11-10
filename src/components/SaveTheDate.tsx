@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Check, Download } from "lucide-react";
+import { useLang } from "../lang";
 
 /* ------------------------------------------------------------------ */
 /*  Renders a 1080×1350 royal save-the-date card entirely on <canvas> */
@@ -188,6 +189,12 @@ async function renderCard(): Promise<Blob | null> {
 
 export default function SaveTheDate() {
   const [state, setState] = useState<"idle" | "busy" | "done">("idle");
+  const { lang, t } = useLang();
+  const H = lang === "hi";
+  const serif = H ? "font-hindi-serif" : "font-serif";
+  const btnFont = H
+    ? "font-hindi-serif tracking-[0.1em]"
+    : "font-roman uppercase tracking-[0.35em] pl-[0.35em]";
 
   const download = async () => {
     if (state === "busy") return;
@@ -210,30 +217,34 @@ export default function SaveTheDate() {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="font-serif italic text-base md:text-lg text-champagne/55">
-        Share the joy with family — take the invitation card with you
+      <p className={`text-base text-champagne/55 md:text-lg ${serif} ${H ? "" : "italic"}`}>
+        {t.sdIntro}
       </p>
       <button
         onClick={download}
         disabled={state === "busy"}
-        className="group relative mt-6 overflow-hidden rounded-full bg-gradient-to-r from-gold-soft via-gold-light to-gold-soft px-10 py-4 font-roman text-[0.65rem] md:text-xs tracking-[0.35em] pl-[0.35em] uppercase text-night shadow-[0_8px_40px_rgba(212,175,55,0.3)] transition-all duration-500 hover:shadow-[0_8px_55px_rgba(212,175,55,0.55)] disabled:opacity-70"
+        className={`group relative mt-6 overflow-hidden rounded-full bg-gradient-to-r from-gold-soft via-gold-light to-gold-soft px-10 py-4 text-[0.65rem] text-night shadow-[0_8px_40px_rgba(212,175,55,0.3)] transition-all duration-500 hover:shadow-[0_8px_55px_rgba(212,175,55,0.55)] disabled:opacity-70 md:text-xs ${btnFont}`}
       >
         <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
         <span className="relative inline-flex items-center gap-3">
           {state === "done" ? (
             <>
-              Saved to your device <Check size={15} strokeWidth={2.4} />
+              {t.sdDone} <Check size={15} strokeWidth={2.4} />
             </>
           ) : (
             <>
-              {state === "busy" ? "Crafting your card…" : "Download Save-the-Date Card"}
+              {state === "busy" ? t.sdBusy : t.sdBtn}
               <Download size={15} strokeWidth={1.8} />
             </>
           )}
         </span>
       </button>
-      <p className="mt-3 font-roman text-[0.52rem] tracking-[0.35em] pl-[0.35em] uppercase text-champagne/35">
-        PNG · 1080 × 1350 · perfect for WhatsApp &amp; print
+      <p
+        className={`mt-3 text-[0.52rem] text-champagne/35 ${
+          H ? "font-hindi-serif text-xs tracking-[0.1em]" : "pl-[0.35em] font-roman uppercase tracking-[0.35em]"
+        }`}
+      >
+        {t.sdMeta}
       </p>
     </div>
   );

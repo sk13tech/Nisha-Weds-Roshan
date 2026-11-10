@@ -3,77 +3,50 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { CalendarDays, Clock, Flower2, Flame, MapPin, Music2, Sparkles, Sun } from "lucide-react";
 import Reveal, { SectionHeading } from "./Reveal";
 import { OrnateDivider } from "./ornaments";
+import { useLang } from "../lang";
 
-const SESSIONS = [
-  {
-    icon: Flower2,
-    numeral: "I",
-    accent: "#4a5d23",
-    img: "/images/gallery-mehndi.jpg",
-    day: "Tuesday",
-    date: "01 December 2026",
-    time: "11:00 AM Onwards",
-    title: "Mehndi",
-    venue: "Ram Nagar Colony, Chas",
-    text: "A morning of henna, marigolds and mango sherbet — Nisha's hands painted with little stories in mehndi while the aunties compete over whose design blooms best.",
-  },
-  {
-    icon: Sun,
-    numeral: "II",
-    accent: "#c98a12",
-    img: "/images/gallery-haldi.jpg",
-    day: "Wednesday",
-    date: "02 December 2026",
-    time: "11:00 AM Onwards",
-    title: "Haldi",
-    venue: "Ram Nagar Colony, Chas",
-    text: "Turmeric, laughter and a golden glow that no filter can match. Wear yellow — and expect to leave drenched in joy (and possibly haldi).",
-  },
-  {
-    icon: Music2,
-    numeral: "III",
-    accent: "#6b2d5c",
-    img: "/images/hero-bg.jpg",
-    day: "Wednesday",
-    date: "02 December 2026",
-    time: "07:00 PM Onwards",
-    title: "Sangeet",
-    venue: "Ram Nagar Colony, Chas",
-    text: "An evening of music and dance beneath strings of lights, where two families battle it out on stage. Bring your best moves — bragging rights are eternal.",
-  },
-  {
-    icon: Flame,
-    numeral: "IV",
-    accent: "#7d1f2e",
-    img: "/images/gallery-mandap.jpg",
-    day: "Thursday",
-    date: "03 December 2026",
-    time: "07:00 PM · The Muhurtham",
-    title: "The Wedding",
-    venue: "Ram Nagar Colony, Chas",
-    text: "Pheras around the sacred fire, seven vows beneath a winter-night sky — the luminous moment the night finally finds its light.",
-    featured: true,
-  },
-  {
-    icon: Sparkles,
-    numeral: "V",
-    accent: "#a4782a",
-    img: "/images/venue.jpg",
-    day: "Thursday",
-    date: "03 December 2026",
-    time: "07:00 PM Onwards",
-    title: "The Reception",
-    venue: "Bholu Bandh, Near Bichali Dukan",
-    text: "Dinner, blessings and an evening glowing gold — a joyful first celebration for the newlyweds, hosted by both families together.",
-  },
+const META = [
+  { icon: Flower2, accent: "#4a5d23", img: "/images/gallery-mehndi.jpg" },
+  { icon: Sun, accent: "#c98a12", img: "/images/gallery-haldi.jpg" },
+  { icon: Music2, accent: "#6b2d5c", img: "/images/hero-bg.jpg" },
+  { icon: Flame, accent: "#7d1f2e", img: "/images/gallery-mandap.jpg", featured: true },
+  { icon: Sparkles, accent: "#a4782a", img: "/images/venue.jpg" },
 ];
 
-function SessionPanel({ s, i }: { s: (typeof SESSIONS)[number]; i: number }) {
+const NUMERALS = ["I", "II", "III", "IV", "V"];
+
+type Session = {
+  title: string;
+  day: string;
+  date: string;
+  time: string;
+  venue: string;
+  text: string;
+};
+
+function SessionPanel({
+  s,
+  i,
+  hindi,
+  sessionWord,
+  featuredLabel,
+}: {
+  s: Session & (typeof META)[number];
+  i: number;
+  hindi: boolean;
+  sessionWord: string;
+  featuredLabel: string;
+}) {
   const flip = i % 2 === 1;
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
   const Icon = s.icon;
+  const numeral = NUMERALS[i];
+  const serif = hindi ? "font-hindi-serif" : "font-serif";
+  const metaFont = hindi
+    ? "font-hindi-serif text-xs tracking-[0.08em] md:text-sm"
+    : "font-roman text-[0.62rem] uppercase tracking-[0.25em]";
 
   return (
     <div
@@ -100,13 +73,18 @@ function SessionPanel({ s, i }: { s: (typeof SESSIONS)[number]; i: number }) {
         <div className="absolute inset-0 bg-gradient-to-t from-night/45 via-transparent to-night/20" />
         <div className="absolute inset-3 border border-champagne/40" />
         {s.featured && (
-          <span className="absolute left-6 top-6 z-10 rounded-full bg-gradient-to-r from-gold-soft via-gold-light to-gold-soft px-5 py-1.5 font-roman text-[0.5rem] uppercase tracking-[0.35em] text-night shadow-lg md:text-[0.55rem]">
-            The Main Ceremony
+          <span
+            className={`absolute left-6 top-6 z-10 whitespace-nowrap rounded-full bg-gradient-to-r from-gold-soft via-gold-light to-gold-soft px-5 py-1.5 text-night shadow-lg ${
+              hindi
+                ? "font-hindi-serif text-sm"
+                : "font-roman text-[0.5rem] uppercase tracking-[0.35em] md:text-[0.55rem]"
+            }`}
+          >
+            {featuredLabel}
           </span>
         )}
-        {/* ghost numeral on photo */}
         <span className="pointer-events-none absolute bottom-2 right-5 select-none font-roman text-[5.5rem] leading-none text-champagne/25 md:text-[7rem]">
-          {s.numeral}
+          {numeral}
         </span>
       </div>
 
@@ -123,7 +101,7 @@ function SessionPanel({ s, i }: { s: (typeof SESSIONS)[number]; i: number }) {
         </div>
 
         <span className="pointer-events-none absolute right-6 top-4 select-none font-roman text-[7rem] leading-none text-maroon/[0.06] md:text-[9rem]">
-          {s.numeral}
+          {numeral}
         </span>
 
         <div className="flex items-center gap-3 lg:hidden">
@@ -134,30 +112,38 @@ function SessionPanel({ s, i }: { s: (typeof SESSIONS)[number]; i: number }) {
         </div>
 
         <p
-          className="mt-5 font-roman text-[0.6rem] uppercase tracking-[0.45em] lg:mt-0 md:text-[0.65rem]"
+          className={`mt-5 lg:mt-0 ${
+            hindi
+              ? "font-hindi-serif text-sm tracking-[0.12em] md:text-base"
+              : "font-roman text-[0.6rem] uppercase tracking-[0.45em] md:text-[0.65rem]"
+          }`}
           style={{ color: s.accent }}
         >
-          Session {s.numeral} · {s.day}
+          {sessionWord} {numeral} · {s.day}
         </p>
-        <h3 className="mt-3 font-serif text-4xl font-medium text-maroon md:text-5xl">{s.title}</h3>
+        <h3
+          className={`mt-3 text-4xl font-medium text-maroon md:text-5xl ${
+            hindi ? "font-hindi-display" : "font-serif"
+          }`}
+        >
+          {s.title}
+        </h3>
 
         <div className="mt-5 flex flex-col gap-2">
-          <span className="flex items-center gap-2.5 text-ink/65">
-            <CalendarDays size={14} className="shrink-0 text-gold-soft" strokeWidth={1.6} />
-            <span className="font-roman text-[0.62rem] uppercase tracking-[0.25em]">{s.date}</span>
-          </span>
-          <span className="flex items-center gap-2.5 text-ink/65">
-            <Clock size={14} className="shrink-0 text-gold-soft" strokeWidth={1.6} />
-            <span className="font-roman text-[0.62rem] uppercase tracking-[0.25em]">{s.time}</span>
-          </span>
-          <span className="flex items-center gap-2.5 text-ink/65">
-            <MapPin size={14} className="shrink-0 text-gold-soft" strokeWidth={1.6} />
-            <span className="font-roman text-[0.62rem] uppercase tracking-[0.25em]">{s.venue}</span>
-          </span>
+          {[
+            { icon: CalendarDays, text: s.date },
+            { icon: Clock, text: s.time },
+            { icon: MapPin, text: s.venue },
+          ].map((row, k) => (
+            <span key={k} className="flex items-center gap-2.5 text-ink/65">
+              <row.icon size={14} className="shrink-0 text-gold-soft" strokeWidth={1.6} />
+              <span className={metaFont}>{row.text}</span>
+            </span>
+          ))}
         </div>
 
         <span className="rule-gold mt-6 w-24" />
-        <p className="mt-5 max-w-[52ch] font-serif text-base italic leading-relaxed text-ink/70 md:text-lg">
+        <p className={`mt-5 max-w-[52ch] text-base leading-relaxed text-ink/70 md:text-lg ${serif} ${hindi ? "" : "italic"}`}>
           {s.text}
         </p>
       </div>
@@ -166,14 +152,20 @@ function SessionPanel({ s, i }: { s: (typeof SESSIONS)[number]; i: number }) {
 }
 
 export default function Events() {
+  const { lang, t } = useLang();
+  const H = lang === "hi";
+
   return (
     <section id="events" className="jali-light relative scroll-mt-24 overflow-hidden bg-cream py-24 md:py-36">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
-          eyebrow="Three Days · Five Sessions"
+          eyebrow={t.evEyebrow}
           title={
             <>
-              The Wedding <span className="font-script text-gold-soft">sessions</span>
+              {t.evTitleA}{" "}
+              <span className={H ? "font-hindi-display text-gold-soft" : "font-script text-gold-soft"}>
+                {t.evTitleScript}
+              </span>
             </>
           }
         />
@@ -181,22 +173,28 @@ export default function Events() {
           <OrnateDivider width={300} />
         </Reveal>
         <Reveal delay={0.22} className="mt-4 text-center">
-          <p className="mx-auto max-w-xl font-serif text-lg italic text-ink/55 md:text-xl">
-            Every ceremony is its own little universe — walk through each one with us.
+          <p className={`mx-auto max-w-xl text-lg text-ink/55 md:text-xl ${H ? "font-hindi-serif" : "font-serif italic"}`}>
+            {t.evIntro}
           </p>
         </Reveal>
 
         <div className="mt-16 flex flex-col gap-14 md:mt-24 md:gap-20">
-          {SESSIONS.map((s, i) => (
-            <Reveal key={s.title} delay={0.05}>
-              <SessionPanel s={s} i={i} />
+          {t.sessions.map((s, i) => (
+            <Reveal key={NUMERALS[i]} delay={0.05}>
+              <SessionPanel
+                s={{ ...s, ...META[i] }}
+                i={i}
+                hindi={H}
+                sessionWord={t.evSession}
+                featuredLabel={t.evFeatured}
+              />
             </Reveal>
           ))}
         </div>
 
         <Reveal delay={0.1} className="mt-20 text-center">
-          <p className="font-serif text-lg italic text-ink/60 md:text-xl">
-            Dress code — festive Indian attire in jewel tones <span className="text-gold-soft">&amp;</span> gold
+          <p className={`text-lg text-ink/60 md:text-xl ${H ? "font-hindi-serif" : "font-serif italic"}`}>
+            {t.evDress}
           </p>
         </Reveal>
       </div>

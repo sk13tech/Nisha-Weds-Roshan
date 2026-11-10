@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-
-const LINKS = [
-  { label: "Our Story", href: "#couple" },
-  { label: "Sessions", href: "#events" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Venue", href: "#venue" },
-  { label: "Contact", href: "#contact" },
-];
+import { useLang } from "../lang";
 
 export default function Navbar({ invited }: { invited: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { lang, setLang, t } = useLang();
+  const H = lang === "hi";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.55);
@@ -21,10 +16,38 @@ export default function Navbar({ invited }: { invited: boolean }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const LINKS = [
+    { label: t.navStory, href: "#couple" },
+    { label: t.navSessions, href: "#events" },
+    { label: t.navGallery, href: "#gallery" },
+    { label: t.navVenue, href: "#venue" },
+    { label: t.navContact, href: "#contact" },
+  ];
+
   const go = (href: string) => {
     setOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const linkCls = H
+    ? "font-hindi-serif text-sm tracking-[0.08em]"
+    : "font-roman text-[0.65rem] uppercase tracking-[0.35em]";
+
+  const LangPill = () => (
+    <div className="flex items-center rounded-full border border-gold/40 p-1">
+      {(["en", "hi"] as const).map((l) => (
+        <button
+          key={l}
+          onClick={() => setLang(l)}
+          className={`rounded-full px-3 py-1 text-[0.62rem] transition-all duration-300 ${
+            lang === l ? "bg-gold text-night" : "text-champagne/70 hover:text-gold-light"
+          } ${H ? "font-hindi-serif" : "font-roman uppercase tracking-[0.2em]"}`}
+        >
+          {l === "en" ? (H ? "EN" : "EN") : "हिं"}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <>
@@ -44,15 +67,17 @@ export default function Navbar({ invited }: { invited: boolean }) {
             className="group flex items-center gap-3"
             aria-label="Back to top"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/50 font-script text-lg text-gold transition-colors group-hover:bg-gold/10">
-              N·R
+            <span className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/50 font-hindi-display text-base text-gold transition-colors group-hover:bg-gold/10">
+              {H ? "नि·रो" : "N·R"}
             </span>
             <span
-              className={`hidden font-roman text-[0.65rem] uppercase tracking-[0.4em] text-champagne/90 sm:block ${
+              className={`hidden text-champagne/90 sm:block ${
                 scrolled ? "opacity-100" : "opacity-0"
-              } transition-opacity duration-500`}
+              } transition-opacity duration-500 ${
+                H ? "font-hindi-serif text-sm" : "font-roman text-[0.65rem] uppercase tracking-[0.4em]"
+              }`}
             >
-              Nisha &amp; Roshan
+              {t.navBrand}
             </span>
           </button>
 
@@ -61,21 +86,21 @@ export default function Navbar({ invited }: { invited: boolean }) {
               <button
                 key={l.href}
                 onClick={() => go(l.href)}
-                className="group relative font-roman text-[0.65rem] uppercase tracking-[0.35em] text-champagne/75 transition-colors hover:text-gold-light"
+                className={`group relative text-champagne/75 transition-colors hover:text-gold-light ${linkCls}`}
               >
                 {l.label}
                 <span className="absolute -bottom-1.5 left-1/2 h-px w-0 -translate-x-1/2 bg-gold transition-all duration-500 group-hover:w-full" />
               </button>
             ))}
+            <LangPill />
           </nav>
 
-          <button
-            onClick={() => setOpen(true)}
-            className="text-gold-light lg:hidden"
-            aria-label="Open menu"
-          >
-            <Menu size={26} strokeWidth={1.5} />
-          </button>
+          <div className="flex items-center gap-4 lg:hidden">
+            <LangPill />
+            <button onClick={() => setOpen(true)} className="text-gold-light" aria-label="Open menu">
+              <Menu size={26} strokeWidth={1.5} />
+            </button>
+          </div>
         </div>
       </motion.header>
 
@@ -103,7 +128,9 @@ export default function Navbar({ invited }: { invited: boolean }) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.12 + i * 0.08, duration: 0.6 }}
                   onClick={() => go(l.href)}
-                  className="font-serif text-4xl text-champagne transition-colors hover:text-gold-light"
+                  className={`text-4xl text-champagne transition-colors hover:text-gold-light ${
+                    H ? "font-hindi-display" : "font-serif"
+                  }`}
                 >
                   {l.label}
                 </motion.button>
@@ -112,9 +139,9 @@ export default function Navbar({ invited }: { invited: boolean }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="text-shimmer-gold mt-4 font-script text-3xl"
+                className={`text-shimmer-gold mt-4 text-3xl ${H ? "font-hindi-display" : "font-script"}`}
               >
-                Nisha &amp; Roshan
+                {t.navBrand}
               </motion.div>
             </div>
           </motion.div>
